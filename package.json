@@ -7,9 +7,6 @@
     "test": "jest --runInBand",
     "db:check": "node scripts/db-check.js",
     "tools:check": "node scripts/tools-check.js",
-    "docker:build": "docker build -t sarva-profiler:dev .",
-    "docker:up": "docker compose up --build",
-    "docker:test:integration": "docker compose run --rm api npm run test:integration",
     "test:integration": "node scripts/run-integration.js",
     "start": "node src/server.js",
     "dev": "nodemon --watch src src/server.js"
