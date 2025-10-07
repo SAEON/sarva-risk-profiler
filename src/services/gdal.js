@@ -14,7 +14,15 @@ async function ogr2ogrToShapefile({ shpPath, pgDsn, sql, layerName }) {
 }
 
 async function zipFiles({ zipPath, parts }) {
-  await execFileAsync('zip', ['-j', zipPath, ...parts]);
+  if (process.platform === 'win32') {
+    const ps = 'powershell.exe';
+    const quote = (s) => `'${String(s).replace(/'/g, "''")}'`;
+    const list = parts.map(quote).join(',');
+    const cmd = `Compress-Archive -LiteralPath ${list} -DestinationPath ${quote(zipPath)} -Force`;
+    await execFileAsync(ps, ['-NoProfile', '-Command', cmd]);
+  } else {
+    await execFileAsync('zip', ['-j', zipPath, ...parts]);
+  }
 }
 
 module.exports = { ogr2ogrToShapefile, zipFiles };

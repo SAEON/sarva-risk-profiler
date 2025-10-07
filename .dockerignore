@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+Dockerfile*
+docker-compose*
+.git
+.gitignore
+.env
+.env.test
+*.tmp
+tmp
+coverage
+*.swp

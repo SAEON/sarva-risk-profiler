@@ -2,9 +2,15 @@
   "name": "sarva-profiler",
   "version": "1.0.0",
   "description": "",
-  "main": "server2.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --runInBand",
+    "db:check": "node scripts/db-check.js",
+    "tools:check": "node scripts/tools-check.js",
+    "docker:build": "docker build -t sarva-profiler:dev .",
+    "docker:up": "docker compose up --build",
+    "docker:test:integration": "docker compose run --rm api npm run test:integration",
+    "test:integration": "node scripts/run-integration.js",
     "start": "node src/server.js",
     "dev": "nodemon --watch src src/server.js"
   },
@@ -20,6 +26,8 @@
     "pg": "^8.16.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }

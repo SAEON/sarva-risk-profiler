@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: sarva_risk_profiler_api
+    restart: unless-stopped
+    env_file:
+      - .env.test
+    environment:
+      NODE_ENV: development
+    ports:
+      - "4001:4001"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
+
