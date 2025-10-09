@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  api:
+  risk-profiler-api:
     build: .
     container_name: sarva_risk_profiler_api
     restart: unless-stopped
