@@ -1,0 +1,854 @@
+[
+  {
+    "code": "KZN263",
+    "name": "Abaqulusi"
+  },
+  {
+    "code": "KZN238",
+    "name": "Alfred Duma"
+  },
+  {
+    "code": "EC124",
+    "name": "Amahlathi"
+  },
+  {
+    "code": "LIM334",
+    "name": "Ba-Phalaborwa"
+  },
+  {
+    "code": "WC053",
+    "name": "Beaufort West"
+  },
+  {
+    "code": "LIM366",
+    "name": "Bela-Bela"
+  },
+  {
+    "code": "WC013",
+    "name": "Bergrivier"
+  },
+  {
+    "code": "KZN276",
+    "name": "Big Five Hlabisa"
+  },
+  {
+    "code": "WC047",
+    "name": "Bitou"
+  },
+  {
+    "code": "LIM351",
+    "name": "Blouberg"
+  },
+  {
+    "code": "EC102",
+    "name": "Blue Crane Route"
+  },
+  {
+    "code": "WC025",
+    "name": "Breede Valley"
+  },
+  {
+    "code": "BUF",
+    "name": "Buffalo City"
+  },
+  {
+    "code": "MP325",
+    "name": "Bushbuckridge"
+  },
+  {
+    "code": "WC033",
+    "name": "Cape Agulhas"
+  },
+  {
+    "code": "WC012",
+    "name": "Cederberg"
+  },
+  {
+    "code": "MP301",
+    "name": "Chief Albert Luthuli"
+  },
+  {
+    "code": "CPT",
+    "name": "City of Cape Town"
+  },
+  {
+    "code": "JHB",
+    "name": "City of Johannesburg"
+  },
+  {
+    "code": "NW403",
+    "name": "City of Matlosana"
+  },
+  {
+    "code": "MP326",
+    "name": "City of Mbombela"
+  },
+  {
+    "code": "TSH",
+    "name": "City of Tshwane"
+  },
+  {
+    "code": "LIM345",
+    "name": "Collins Chabane"
+  },
+  {
+    "code": "KZN254",
+    "name": "Dannhauser"
+  },
+  {
+    "code": "NC087",
+    "name": "Dawid Kruiper"
+  },
+  {
+    "code": "FS192",
+    "name": "Dihlabeng"
+  },
+  {
+    "code": "NC092",
+    "name": "Dikgatlong"
+  },
+  {
+    "code": "MP306",
+    "name": "Dipaleseng"
+  },
+  {
+    "code": "NW384",
+    "name": "Ditsobotla"
+  },
+  {
+    "code": "EC137",
+    "name": "Dr AB Xuma"
+  },
+  {
+    "code": "WC023",
+    "name": "Drakenstein"
+  },
+  {
+    "code": "EC101",
+    "name": "Dr Beyers Naude"
+  },
+  {
+    "code": "MP316",
+    "name": "Dr JS Moroka"
+  },
+  {
+    "code": "KZN436",
+    "name": "Dr Nkosazana Dlamini Zuma"
+  },
+  {
+    "code": "MP304",
+    "name": "Dr Pixley Ka Isaka Seme"
+  },
+  {
+    "code": "KZN261",
+    "name": "eDumbe"
+  },
+  {
+    "code": "EKU",
+    "name": "Ekurhuleni"
+  },
+  {
+    "code": "LIM472",
+    "name": "Elias Motsoaledi"
+  },
+  {
+    "code": "EC141",
+    "name": "Elundini"
+  },
+  {
+    "code": "KZN253",
+    "name": "Emadlangeni"
+  },
+  {
+    "code": "MP314",
+    "name": "Emakhazeni"
+  },
+  {
+    "code": "MP312",
+    "name": "Emalahleni"
+  },
+  {
+    "code": "EC136",
+    "name": "Emalahleni"
+  },
+  {
+    "code": "GT421",
+    "name": "Emfuleni"
+  },
+  {
+    "code": "NC073",
+    "name": "Emthanjeni"
+  },
+  {
+    "code": "KZN241",
+    "name": "Endumeni"
+  },
+  {
+    "code": "EC139",
+    "name": "Enoch Mgijima"
+  },
+  {
+    "code": "LIM471",
+    "name": "Ephraim Mogale"
+  },
+  {
+    "code": "ETH",
+    "name": "eThekwini"
+  },
+  {
+    "code": "LIM476",
+    "name": "Fetakgomo Tubatse"
+  },
+  {
+    "code": "NC453",
+    "name": "Gamagara"
+  },
+  {
+    "code": "NC452",
+    "name": "Ga-Segonyana"
+  },
+  {
+    "code": "WC044",
+    "name": "George"
+  },
+  {
+    "code": "MP307",
+    "name": "Govan Mbeki"
+  },
+  {
+    "code": "LIM331",
+    "name": "Greater Giyani"
+  },
+  {
+    "code": "KZN433",
+    "name": "Greater Kokstad"
+  },
+  {
+    "code": "LIM332",
+    "name": "Greater Letaba"
+  },
+  {
+    "code": "NW394",
+    "name": "Greater Taung"
+  },
+  {
+    "code": "LIM333",
+    "name": "Greater Tzaneen"
+  },
+  {
+    "code": "EC123",
+    "name": "Great Kei"
+  },
+  {
+    "code": "NC065",
+    "name": "Hantam"
+  },
+  {
+    "code": "WC042",
+    "name": "Hessequa"
+  },
+  {
+    "code": "KZN224",
+    "name": "Impendle"
+  },
+  {
+    "code": "KZN327",
+    "name": "Inkosi Langalibalele"
+  },
+  {
+    "code": "EC135",
+    "name": "Intsika Yethu"
+  },
+  {
+    "code": "EC131",
+    "name": "Inxuba Yethemba"
+  },
+  {
+    "code": "NW405",
+    "name": "JB Marks"
+  },
+  {
+    "code": "NC451",
+    "name": "Joe Morolong"
+  },
+  {
+    "code": "KZN272",
+    "name": "Jozini"
+  },
+  {
+    "code": "NW397",
+    "name": "Kagisano-Molopo"
+  },
+  {
+    "code": "NC082",
+    "name": "Kai !Garib"
+  },
+  {
+    "code": "NC064",
+    "name": "Kamiesberg"
+  },
+  {
+    "code": "WC041",
+    "name": "Kannaland"
+  },
+  {
+    "code": "NC074",
+    "name": "Kareeberg"
+  },
+  {
+    "code": "NC066",
+    "name": "Karoo Hoogland"
+  },
+  {
+    "code": "NC086",
+    "name": "Kgatelopele"
+  },
+  {
+    "code": "NW374",
+    "name": "Kgetlengrivier"
+  },
+  {
+    "code": "NC067",
+    "name": "Khâi-Ma"
+  },
+  {
+    "code": "NC084",
+    "name": "!Kheis"
+  },
+  {
+    "code": "EC157",
+    "name": "King Sabata Dalindyebo"
+  },
+  {
+    "code": "WC048",
+    "name": "Knysna"
+  },
+  {
+    "code": "FS162",
+    "name": "Kopanong"
+  },
+  {
+    "code": "EC108",
+    "name": "Kouga"
+  },
+  {
+    "code": "EC109",
+    "name": "Kou-Kamma"
+  },
+  {
+    "code": "KZN292",
+    "name": "KwaDukuza"
+  },
+  {
+    "code": "WC051",
+    "name": "Laingsburg"
+  },
+  {
+    "code": "WC026",
+    "name": "Langeberg"
+  },
+  {
+    "code": "MP305",
+    "name": "Lekwa"
+  },
+  {
+    "code": "NW396",
+    "name": "Lekwa-Teemane"
+  },
+  {
+    "code": "LIM355",
+    "name": "Lepelle-Nkumpi"
+  },
+  {
+    "code": "LIM362",
+    "name": "Lephalale"
+  },
+  {
+    "code": "GT423",
+    "name": "Lesedi"
+  },
+  {
+    "code": "FS161",
+    "name": "Letsemeng"
+  },
+  {
+    "code": "NW372",
+    "name": "Local Municipality of Madibeng"
+  },
+  {
+    "code": "NW383",
+    "name": "Mafikeng"
+  },
+  {
+    "code": "FS205",
+    "name": "Mafube"
+  },
+  {
+    "code": "NC093",
+    "name": "Magareng"
+  },
+  {
+    "code": "EC104",
+    "name": "Makana"
+  },
+  {
+    "code": "LIM344",
+    "name": "Makhado"
+  },
+  {
+    "code": "LIM473",
+    "name": "Makhuduthamaga"
+  },
+  {
+    "code": "FS194",
+    "name": "Maluti-a-Phofung"
+  },
+  {
+    "code": "NW393",
+    "name": "Mamusa"
+  },
+  {
+    "code": "KZN291",
+    "name": "Mandeni"
+  },
+  {
+    "code": "MAN",
+    "name": "Mangaung"
+  },
+  {
+    "code": "FS196",
+    "name": "Mantsopa"
+  },
+  {
+    "code": "KZN294",
+    "name": "Maphumulo"
+  },
+  {
+    "code": "NW404",
+    "name": "Maquassi Hills"
+  },
+  {
+    "code": "LIM335",
+    "name": "Maruleng"
+  },
+  {
+    "code": "FS181",
+    "name": "Masilonyana"
+  },
+  {
+    "code": "EC441",
+    "name": "Matatiele"
+  },
+  {
+    "code": "FS184",
+    "name": "Matjhabeng"
+  },
+  {
+    "code": "WC011",
+    "name": "Matzikama"
+  },
+  {
+    "code": "EC121",
+    "name": "Mbhashe"
+  },
+  {
+    "code": "GT484",
+    "name": "Merafong City"
+  },
+  {
+    "code": "FS204",
+    "name": "Metsimaholo"
+  },
+  {
+    "code": "KZN281",
+    "name": "Mfolozi"
+  },
+  {
+    "code": "EC156",
+    "name": "Mhlontlo"
+  },
+  {
+    "code": "GT422",
+    "name": "Midvaal"
+  },
+  {
+    "code": "KZN226",
+    "name": "Mkhambathini"
+  },
+  {
+    "code": "MP303",
+    "name": "Mkhondo"
+  },
+  {
+    "code": "EC122",
+    "name": "Mnquma"
+  },
+  {
+    "code": "LIM368",
+    "name": "Modimolle-Mookgophong"
+  },
+  {
+    "code": "LIM367",
+    "name": "Mogalakwena"
+  },
+  {
+    "code": "GT481",
+    "name": "Mogale City"
+  },
+  {
+    "code": "FS163",
+    "name": "Mohokare"
+  },
+  {
+    "code": "LIM353",
+    "name": "Molemole"
+  },
+  {
+    "code": "FS201",
+    "name": "Moqhaka"
+  },
+  {
+    "code": "NW371",
+    "name": "Moretele"
+  },
+  {
+    "code": "NW375",
+    "name": "Moses Kotane"
+  },
+  {
+    "code": "WC043",
+    "name": "Mossel Bay"
+  },
+  {
+    "code": "KZN223",
+    "name": "Mpofana"
+  },
+  {
+    "code": "KZN244",
+    "name": "Msinga"
+  },
+  {
+    "code": "MP302",
+    "name": "Msukaligwa"
+  },
+  {
+    "code": "KZN285",
+    "name": "Mthonjaneni"
+  },
+  {
+    "code": "KZN275",
+    "name": "Mtubatuba"
+  },
+  {
+    "code": "LIM341",
+    "name": "Musina"
+  },
+  {
+    "code": "FS185",
+    "name": "Nala"
+  },
+  {
+    "code": "NW392",
+    "name": "Naledi"
+  },
+  {
+    "code": "NC062",
+    "name": "Nama Khoi"
+  },
+  {
+    "code": "EC105",
+    "name": "Ndlambe"
+  },
+  {
+    "code": "KZN293",
+    "name": "Ndwedwe"
+  },
+  {
+    "code": "NMA",
+    "name": "Nelson Mandela Bay"
+  },
+  {
+    "code": "KZN252",
+    "name": "Newcastle"
+  },
+  {
+    "code": "EC126",
+    "name": "Ngqushwa"
+  },
+  {
+    "code": "EC153",
+    "name": "Ngquza Hill"
+  },
+  {
+    "code": "FS203",
+    "name": "Ngwathe"
+  },
+  {
+    "code": "KZN286",
+    "name": "Nkandla"
+  },
+  {
+    "code": "FS193",
+    "name": "Nketoana"
+  },
+  {
+    "code": "MP324",
+    "name": "Nkomazi"
+  },
+  {
+    "code": "KZN265",
+    "name": "Nongoma"
+  },
+  {
+    "code": "KZN242",
+    "name": "Nqutu"
+  },
+  {
+    "code": "EC444",
+    "name": "Ntabankulu"
+  },
+  {
+    "code": "EC155",
+    "name": "Nyandeni"
+  },
+  {
+    "code": "KZN235",
+    "name": "Okhahlamba"
+  },
+  {
+    "code": "WC045",
+    "name": "Oudtshoorn"
+  },
+  {
+    "code": "WC032",
+    "name": "Overstrand"
+  },
+  {
+    "code": "NC094",
+    "name": "Phokwane"
+  },
+  {
+    "code": "FS195",
+    "name": "Phumelela"
+  },
+  {
+    "code": "LIM354",
+    "name": "Polokwane"
+  },
+  {
+    "code": "EC154",
+    "name": "Port St Johns"
+  },
+  {
+    "code": "WC052",
+    "name": "Prince Albert"
+  },
+  {
+    "code": "NW385",
+    "name": "Ramotshere Moiloa"
+  },
+  {
+    "code": "GT485",
+    "name": "Rand West City"
+  },
+  {
+    "code": "NW381",
+    "name": "Ratlou"
+  },
+  {
+    "code": "EC129",
+    "name": "Raymond Mhlaba"
+  },
+  {
+    "code": "KZN216",
+    "name": "Ray Nkonyeni"
+  },
+  {
+    "code": "NC075",
+    "name": "Renosterberg"
+  },
+  {
+    "code": "KZN227",
+    "name": "Richmond"
+  },
+  {
+    "code": "NC061",
+    "name": "Richtersveld"
+  },
+  {
+    "code": "NW373",
+    "name": "Rustenburg"
+  },
+  {
+    "code": "EC138",
+    "name": "Sakhisizwe"
+  },
+  {
+    "code": "WC014",
+    "name": "Saldanha Bay"
+  },
+  {
+    "code": "EC142",
+    "name": "Senqu"
+  },
+  {
+    "code": "FS191",
+    "name": "Setsoto"
+  },
+  {
+    "code": "NC078",
+    "name": "Siyancuma"
+  },
+  {
+    "code": "NC077",
+    "name": "Siyathemba"
+  },
+  {
+    "code": "NC091",
+    "name": "Sol Plaatje"
+  },
+  {
+    "code": "WC024",
+    "name": "Stellenbosch"
+  },
+  {
+    "code": "MP313",
+    "name": "Steve Tshwete"
+  },
+  {
+    "code": "EC106",
+    "name": "Sundays River Valley"
+  },
+  {
+    "code": "WC015",
+    "name": "Swartland"
+  },
+  {
+    "code": "WC034",
+    "name": "Swellendam"
+  },
+  {
+    "code": "MP321",
+    "name": "Thaba Chweu"
+  },
+  {
+    "code": "LIM361",
+    "name": "Thabazimbi"
+  },
+  {
+    "code": "WC031",
+    "name": "Theewaterskloof"
+  },
+  {
+    "code": "NC076",
+    "name": "Thembelihle"
+  },
+  {
+    "code": "MP315",
+    "name": "Thembisile"
+  },
+  {
+    "code": "KZN225",
+    "name": "The Msunduzi"
+  },
+  {
+    "code": "LIM343",
+    "name": "Thulamela"
+  },
+  {
+    "code": "FS182",
+    "name": "Tokologo"
+  },
+  {
+    "code": "NC085",
+    "name": "Tsantsabane"
+  },
+  {
+    "code": "NW382",
+    "name": "Tswaing"
+  },
+  {
+    "code": "FS183",
+    "name": "Tswelopele"
+  },
+  {
+    "code": "KZN434",
+    "name": "Ubuhlebezwe"
+  },
+  {
+    "code": "NC071",
+    "name": "Ubuntu"
+  },
+  {
+    "code": "KZN266",
+    "name": "Ulundi"
+  },
+  {
+    "code": "KZN212",
+    "name": "Umdoni"
+  },
+  {
+    "code": "KZN271",
+    "name": "Umhlabuyalingana"
+  },
+  {
+    "code": "KZN282",
+    "name": "uMhlathuze"
+  },
+  {
+    "code": "KZN284",
+    "name": "uMlalazi"
+  },
+  {
+    "code": "KZN222",
+    "name": "uMngeni"
+  },
+  {
+    "code": "KZN221",
+    "name": "uMshwathi"
+  },
+  {
+    "code": "NC072",
+    "name": "Umsobomvu"
+  },
+  {
+    "code": "KZN214",
+    "name": "uMuziwabantu"
+  },
+  {
+    "code": "KZN245",
+    "name": "Umvoti"
+  },
+  {
+    "code": "KZN435",
+    "name": "Umzimkhulu"
+  },
+  {
+    "code": "EC442",
+    "name": "Umzimvubu"
+  },
+  {
+    "code": "KZN213",
+    "name": "Umzumbe"
+  },
+  {
+    "code": "KZN262",
+    "name": "uPhongolo"
+  },
+  {
+    "code": "MP311",
+    "name": "Victor Khanye"
+  },
+  {
+    "code": "EC145",
+    "name": "Walter Sisulu"
+  },
+  {
+    "code": "EC443",
+    "name": "Winnie Madikizela-Mandela"
+  },
+  {
+    "code": "WC022",
+    "name": "Witzenberg"
+  }
+]
