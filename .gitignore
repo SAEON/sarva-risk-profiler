@@ -1,3 +1,4 @@
 node_modules
 .env*
-*tmp
+tmp/*.zip 
+tmp/municipalities.json
