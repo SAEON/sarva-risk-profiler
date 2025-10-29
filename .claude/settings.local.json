@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/c/Users/samukeloj/Documents/**)",
+      "Bash(cd:*)",
+      "Bash(docker-compose exec risk-profiler-api npm install multer xlsx)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -31,6 +31,7 @@ app.use(catalogExport);
 app.use(require("./features/tiles/routes"));
 app.use(require("./features/choropleth/routes"));
 app.use(require("./features/search/routes"));
+app.use(require("./features/import/routes"));
 
 app.use((req, res) => res.status(404).json({ ok: false, error: 'not_found' }));
 app.use(errorHandler);
