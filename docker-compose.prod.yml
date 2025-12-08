@@ -2,14 +2,14 @@ services:
   risk-profiler-api:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     image: sarva_risk_profiler_api:{$TAG}
     container_name: sarva_risk_profiler_api
     restart: unless-stopped
     env_file:
-      - .env.test
+      - .env
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     ports:
       - "4001:4001"
     volumes:
