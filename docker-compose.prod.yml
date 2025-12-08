@@ -3,7 +3,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile.prod
-    image: sarva_risk_profiler_api:{$TAG}
+    image: sarva_risk_profiler_api:${TAG}
     container_name: sarva_risk_profiler_api
     restart: unless-stopped
     env_file:
