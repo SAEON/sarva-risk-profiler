@@ -17,7 +17,7 @@ RUN npm ci --no-audit --no-fund
 # Copy source
 COPY . .
 
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 EXPOSE 4001
 
 CMD ["npm","run","start"]
