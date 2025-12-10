@@ -1,8 +1,9 @@
-// Connectivity and schema check for the test database
+// Database connectivity, schema, and data verification
 // Loads .env.test explicitly, then verifies:
 // - DB connection works
 // - PostGIS is installed
 // - Required tables/schemas exist
+// - Reference data is loaded (dim.*, catalog.*, admin.*)
 
 const fs = require('fs');
 const path = require('path');
@@ -117,6 +118,66 @@ const pool = new Pool({
       throw new Error('Missing required tables: ' + missing.join(', '));
     }
     console.log('DB check: required tables exist');
+
+    // Check reference data exists
+    console.log('DB check: verifying reference data...');
+
+    const dataChecks = [
+      {
+        table: 'dim.scenario',
+        minRows: 1,
+        description: 'scenarios (e.g., baseline, saps_actual)',
+        sampleQuery: 'SELECT key FROM dim.scenario ORDER BY id LIMIT 3'
+      },
+      {
+        table: 'dim.time',
+        minRows: 1,
+        description: 'time periods',
+        sampleQuery: 'SELECT period FROM dim.time ORDER BY period DESC LIMIT 3'
+      },
+      {
+        table: 'catalog.indicator',
+        minRows: 1,
+        description: 'indicators',
+        sampleQuery: 'SELECT key FROM catalog.indicator LIMIT 3'
+      },
+      {
+        table: 'admin.local_municipality_2018',
+        minRows: 1,
+        description: 'municipalities',
+        sampleQuery: 'SELECT code, name FROM admin.local_municipality_2018 LIMIT 3'
+      }
+    ];
+
+    const dataWarnings = [];
+    for (const check of dataChecks) {
+      const { rows } = await pool.query(`SELECT COUNT(*) as count FROM ${check.table}`);
+      const count = parseInt(rows[0].count);
+
+      if (count < check.minRows) {
+        dataWarnings.push(`${check.table}: ${count} rows (expected at least ${check.minRows} ${check.description})`);
+      } else {
+        console.log(`DB check: ${check.table} has ${count} ${check.description}`);
+
+        // Show sample data
+        const sample = await pool.query(check.sampleQuery);
+        if (sample.rows.length > 0) {
+          const keys = Object.keys(sample.rows[0]);
+          sample.rows.forEach(row => {
+            const values = keys.map(k => row[k]).join(', ');
+            console.log(`  - ${values}`);
+          });
+        }
+      }
+    }
+
+    if (dataWarnings.length > 0) {
+      console.warn('\nDB check: ⚠️  WARNING - Missing reference data:');
+      dataWarnings.forEach(w => console.warn(`  - ${w}`));
+      console.warn('\nReference data is required for the application to function.');
+      console.warn('Run: npm run etl:import');
+      console.warn('');
+    }
 
     console.log('DB check: success');
     process.exit(0);

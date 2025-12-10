@@ -7,6 +7,12 @@
     "test": "jest --runInBand",
     "db:check": "node scripts/db-check.js",
     "db:analyze-crime": "node scripts/analyze-crime-data.js",
+    "db:analyze-schema": "node scripts/analyze-schema.js",
+    "db:migrate": "node scripts/migrate.js",
+    "db:migrate:dry-run": "node scripts/migrate.js --dry-run",
+    "etl:export": "node scripts/etl/export-reference-data.js",
+    "etl:import": "node scripts/etl/import-reference-data.js",
+    "etl:import:dry-run": "node scripts/etl/import-reference-data.js --dry-run",
     "tools:check": "node scripts/tools-check.js",
     "test:integration": "node scripts/run-integration.js",
     "start": "node src/server.js",
@@ -17,12 +23,15 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@turf/turf": "^7.3.0",
     "compression": "^1.8.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "jszip": "^3.10.1",
     "multer": "^2.0.2",
     "pg": "^8.16.3",
+    "shapefile": "^0.6.6",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

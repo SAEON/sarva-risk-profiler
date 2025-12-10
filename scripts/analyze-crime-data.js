@@ -179,7 +179,7 @@ async function analyzeDatabase() {
     console.log('5. AVAILABLE SCENARIOS');
     console.log('-'.repeat(80));
     const scenarios = await pool.query(`
-      SELECT id, key, label, description
+      SELECT id, key, label
       FROM dim.scenario
       ORDER BY
         CASE WHEN key = 'baseline' THEN 0 ELSE 1 END,
@@ -189,7 +189,6 @@ async function analyzeDatabase() {
     scenarios.rows.forEach(s => {
       console.log(`  "${s.key}" (ID: ${s.id})`);
       if (s.label) console.log(`    Label: ${s.label}`);
-      if (s.description) console.log(`    Description: ${s.description}`);
       if (s.key === 'baseline') console.log(`    ← DEFAULT for crime imports`);
       console.log();
     });
