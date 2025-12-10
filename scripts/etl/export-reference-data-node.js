@@ -89,11 +89,12 @@ async function generateInserts(schema, table, rows, columns) {
     const values = columnNames.map(col => {
       const value = row[col];
 
-      // Special handling for PostGIS geometry - use ST_GeomFromText
+      // Special handling for PostGIS geometry - use ST_GeomFromEWKT
       if (hasGeometry && columns.find(c => c.column_name === col && c.udt_name === 'geometry')) {
         if (value === null) return 'NULL';
-        // The value is already in WKT or EWKT format from the query
-        return value;
+        // The value is in EWKT format from the query, wrap it in ST_GeomFromEWKT
+        const escapedValue = value.replace(/'/g, "''");
+        return `ST_GeomFromEWKT('${escapedValue}')`;
       }
 
       return escapeSqlValue(value);
@@ -181,16 +182,6 @@ async function exportTable(schema, table, description) {
     // Generate INSERT statements
     const inserts = await generateInserts(schema, table, rows, columns);
     sqlContent += inserts;
-
-    // For tables with geometry, we need to use ST_GeomFromEWKT instead of direct insert
-    if (geomColumn) {
-      const geomColName = geomColumn.column_name;
-      // Replace the geometry values with ST_GeomFromEWKT calls
-      sqlContent = sqlContent.replace(
-        new RegExp(`(${geomColName}\\)) VALUES \\((.+?)'(SRID=\\d+;.+?)'`, 'g'),
-        `$1) VALUES ($2ST_GeomFromEWKT('$3')`
-      );
-    }
 
     // Write to file
     fs.writeFileSync(filepath, sqlContent, 'utf8');
