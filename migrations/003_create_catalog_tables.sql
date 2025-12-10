@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS catalog.indicator (
     source_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-    CONSTRAINT chk_polarity CHECK (polarity IN ('positive', 'negative', 'neutral', 'adverse', 'beneficial')),
-    CONSTRAINT chk_measure_type CHECK (measure_type IN ('indicator', 'index', 'component'))
+    CONSTRAINT chk_polarity CHECK (polarity IN ('adverse', 'beneficial', 'neutral')),
+    CONSTRAINT chk_measure_type CHECK (measure_type IN ('indicator', 'sub_index'))
 );
 
 COMMENT ON TABLE catalog.indicator IS 'Master catalog of all indicators and metrics';
