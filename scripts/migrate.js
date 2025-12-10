@@ -71,6 +71,61 @@ async function runMigration(filename) {
 }
 
 /**
+ * Clean up existing database artifacts
+ * Only drops tables and functions that our migrations will create
+ */
+async function cleanupDatabase() {
+  console.log('\n🧹 Cleaning up existing database artifacts...');
+
+  // List of specific tables to drop (in reverse order of dependencies)
+  const tables = [
+    'data.indicator_value',
+    'admin.local_municipality_2018',
+    'catalog.indicator',
+    'dim.time',
+    'dim.scenario'
+  ];
+
+  // List of functions to drop (these also drop their triggers)
+  const functions = [
+    'data.update_timestamp()',
+    'admin.update_timestamp()',
+    'catalog.update_timestamp()',
+    'dim.update_timestamp()'
+  ];
+
+  // Drop tables
+  for (const table of tables) {
+    if (isDryRun) {
+      console.log(`  [DRY RUN] Would drop table: ${table} CASCADE`);
+    } else {
+      try {
+        await pool.query(`DROP TABLE IF EXISTS ${table} CASCADE`);
+        console.log(`  ✓ Dropped table: ${table}`);
+      } catch (error) {
+        console.error(`  ⚠️  Failed to drop table ${table}: ${error.message}`);
+      }
+    }
+  }
+
+  // Drop functions (this also drops associated triggers)
+  for (const func of functions) {
+    if (isDryRun) {
+      console.log(`  [DRY RUN] Would drop function: ${func} CASCADE`);
+    } else {
+      try {
+        await pool.query(`DROP FUNCTION IF EXISTS ${func} CASCADE`);
+        console.log(`  ✓ Dropped function: ${func}`);
+      } catch (error) {
+        console.error(`  ⚠️  Failed to drop function ${func}: ${error.message}`);
+      }
+    }
+  }
+
+  console.log('✓ Cleanup completed\n');
+}
+
+/**
  * Main migration runner
  */
 async function main() {
@@ -87,6 +142,9 @@ async function main() {
     console.log('Testing database connection...');
     const result = await pool.query('SELECT current_database(), current_user');
     console.log(`✓ Connected to database: ${result.rows[0].current_database}`);
+
+    // Clean up existing artifacts before migrating
+    await cleanupDatabase();
 
     const migrations = [
       '001_create_schemas_and_extensions.sql',
