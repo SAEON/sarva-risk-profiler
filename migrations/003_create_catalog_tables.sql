@@ -63,6 +63,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Drop existing trigger if it exists
+DROP TRIGGER IF EXISTS trigger_indicator_timestamp ON catalog.indicator;
+
 -- Apply timestamp trigger
 CREATE TRIGGER trigger_indicator_timestamp
     BEFORE UPDATE ON catalog.indicator

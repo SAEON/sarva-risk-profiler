@@ -64,6 +64,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Drop existing triggers if they exist
+DROP TRIGGER IF EXISTS trigger_scenario_timestamp ON dim.scenario;
+DROP TRIGGER IF EXISTS trigger_time_timestamp ON dim.time;
+
 -- Apply timestamp trigger to scenario
 CREATE TRIGGER trigger_scenario_timestamp
     BEFORE UPDATE ON dim.scenario

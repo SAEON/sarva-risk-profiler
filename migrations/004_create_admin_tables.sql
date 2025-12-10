@@ -57,6 +57,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Drop existing trigger if it exists
+DROP TRIGGER IF EXISTS trigger_lm2018_timestamp ON admin.local_municipality_2018;
+
 -- Apply timestamp trigger
 CREATE TRIGGER trigger_lm2018_timestamp
     BEFORE UPDATE ON admin.local_municipality_2018
