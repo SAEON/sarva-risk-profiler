@@ -8,6 +8,7 @@ exports.periods = async (_req, res) => {
       WHERE granularity='year'
       ORDER BY period DESC;
     `);
+    res.setHeader('Cache-Control', 'no-cache');
     res.json(rows);
   } catch (e) {
     res.status(500).json({ error: e.message });
@@ -48,13 +49,13 @@ exports.themes = async (req, res) => {
       ORDER BY 1;
     `;
     const { rows } = await pool.query(sql, params);
+    res.setHeader('Cache-Control', 'no-cache');
     res.json(rows.map(r => r.theme));
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 };
 
-// GET /catalog/indicators?kind=&theme=&period=
 exports.indicators = async (req, res) => {
   try {
     const kind   = (req.query.kind || '').toLowerCase();
@@ -93,6 +94,7 @@ exports.indicators = async (req, res) => {
       ORDER BY COALESCE(i.sort_order, 9999), i.label, i.key;
     `;
     const { rows } = await pool.query(sql, params);
+    res.setHeader('Cache-Control', 'no-cache');
     res.json(rows);
   } catch (e) {
     res.status(500).json({ error: e.message });
