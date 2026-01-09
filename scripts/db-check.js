@@ -179,7 +179,133 @@ const pool = new Pool({
       console.warn('');
     }
 
-    console.log('DB check: success');
+    // Additional data integrity checks
+    console.log('\nDB check: verifying data integrity...');
+
+    // Check indicator_value data exists
+    const ivCount = await pool.query('SELECT COUNT(*) as count FROM data.indicator_value');
+    const indicatorValueCount = parseInt(ivCount.rows[0].count);
+    if (indicatorValueCount === 0) {
+      console.warn('⚠️  WARNING: data.indicator_value is EMPTY - no indicator data loaded');
+      console.warn('   The application will not show any data in maps or charts.');
+      console.warn('   Load data via: POST /import/crime-stats API endpoint');
+    } else {
+      console.log(`DB check: data.indicator_value has ${indicatorValueCount} records ✓`);
+    }
+
+    // Check for sub_index indicators (critical for theme dropdown)
+    const subIndexCheck = await pool.query(`
+      SELECT measure_type, COUNT(*) as count
+      FROM catalog.indicator
+      WHERE measure_type = 'sub_index'
+      GROUP BY measure_type
+    `);
+    const subIndexCount = subIndexCheck.rows.length > 0 ? parseInt(subIndexCheck.rows[0].count) : 0;
+    if (subIndexCount === 0) {
+      console.warn('⚠️  WARNING: No sub_index indicators found in catalog');
+    } else {
+      console.log(`DB check: catalog has ${subIndexCount} sub_index indicators ✓`);
+
+      // Check which themes exist for sub_index
+      const subIndexThemes = await pool.query(`
+        SELECT DISTINCT theme
+        FROM catalog.indicator
+        WHERE measure_type = 'sub_index'
+          AND theme IS NOT NULL
+        ORDER BY theme
+      `);
+      if (subIndexThemes.rows.length > 0) {
+        console.log(`  Themes: ${subIndexThemes.rows.map(r => r.theme).join(', ')}`);
+      }
+    }
+
+    // Check for period 2024 (commonly used in frontend)
+    const period2024 = await pool.query(`
+      SELECT id, period, label
+      FROM dim.time
+      WHERE period = 2024 AND granularity = 'year'
+    `);
+    if (period2024.rows.length === 0) {
+      console.warn('⚠️  WARNING: Period 2024 not found in dim.time');
+      console.warn('   Frontend may fail when selecting 2024');
+    } else {
+      console.log(`DB check: period 2024 exists (id=${period2024.rows[0].id}) ✓`);
+    }
+
+    // CRITICAL: Verify themes endpoint query (sub_index + period=2024)
+    if (indicatorValueCount > 0 && subIndexCount > 0 && period2024.rows.length > 0) {
+      const themesQuery = await pool.query(`
+        SELECT DISTINCT i.theme
+        FROM catalog.indicator i
+        INNER JOIN data.indicator_value iv ON i.id = iv.indicator_id
+        INNER JOIN dim.time t ON iv.time_id = t.id
+        WHERE i.measure_type = 'sub_index'
+          AND t.period = 2024
+          AND NULLIF(btrim(i.theme),'') IS NOT NULL
+        ORDER BY i.theme
+      `);
+
+      if (themesQuery.rows.length === 0) {
+        console.warn('⚠️  WARNING: Themes endpoint will return EMPTY for sub_index + period=2024');
+        console.warn('   No sub_index indicators have data for period 2024');
+        console.warn('   Frontend theme dropdown will be disabled');
+      } else {
+        console.log(`DB check: themes endpoint query returns ${themesQuery.rows.length} theme(s) ✓`);
+        console.log(`  Themes for sub_index + 2024: ${themesQuery.rows.map(r => r.theme).join(', ')}`);
+
+        // Count indicators per theme
+        const themeDetail = await pool.query(`
+          SELECT i.theme, COUNT(DISTINCT i.id) as indicator_count, COUNT(*) as value_count
+          FROM catalog.indicator i
+          INNER JOIN data.indicator_value iv ON i.id = iv.indicator_id
+          INNER JOIN dim.time t ON iv.time_id = t.id
+          WHERE i.measure_type = 'sub_index'
+            AND t.period = 2024
+            AND NULLIF(btrim(i.theme),'') IS NOT NULL
+          GROUP BY i.theme
+          ORDER BY i.theme
+        `);
+        themeDetail.rows.forEach(row => {
+          console.log(`    - "${row.theme}": ${row.indicator_count} indicators, ${row.value_count} values`);
+        });
+      }
+    }
+
+    // Check for common data issues
+    const issues = [];
+
+    // Check for NULL themes in indicators
+    const nullThemes = await pool.query(`
+      SELECT COUNT(*) as count
+      FROM catalog.indicator
+      WHERE theme IS NULL OR btrim(theme) = ''
+    `);
+    const nullThemeCount = parseInt(nullThemes.rows[0].count);
+    if (nullThemeCount > 0) {
+      issues.push(`${nullThemeCount} indicators have NULL or empty theme`);
+    }
+
+    // Check for indicators with no data
+    const indicatorsNoData = await pool.query(`
+      SELECT COUNT(*) as count
+      FROM catalog.indicator i
+      WHERE NOT EXISTS (
+        SELECT 1 FROM data.indicator_value iv WHERE iv.indicator_id = i.id
+      )
+    `);
+    const noDataCount = parseInt(indicatorsNoData.rows[0].count);
+    if (noDataCount > 0) {
+      issues.push(`${noDataCount} indicators have NO data in indicator_value table`);
+    }
+
+    if (issues.length > 0) {
+      console.log('\nDB check: potential issues detected:');
+      issues.forEach(issue => console.log(`  ⚠️  ${issue}`));
+    }
+
+    console.log('\n' + '='.repeat(60));
+    console.log('DB check: ✓ SUCCESS - Database is operational');
+    console.log('='.repeat(60));
     process.exit(0);
   } catch (err) {
     console.error('DB check: FAILED ->', err.message);
