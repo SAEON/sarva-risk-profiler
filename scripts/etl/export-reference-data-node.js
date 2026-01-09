@@ -224,6 +224,11 @@ async function main() {
         schema: 'admin',
         table: 'local_municipality_2018',
         description: 'Municipality boundaries with PostGIS geometry (213 records)'
+      },
+      {
+        schema: 'data',
+        table: 'indicator_value',
+        description: 'Indicator values fact table (~85k records: actual crime data)'
       }
     ];
 
