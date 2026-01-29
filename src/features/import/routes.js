@@ -25,6 +25,10 @@ const upload = multer({
   }
 });
 
+// ============================================
+// Crime Statistics Import Routes
+// ============================================
+
 // GET /import/crime-stats/themes - List available themes
 router.get('/import/crime-stats/themes', controller.listThemes);
 
@@ -33,5 +37,18 @@ router.get('/import/crime-stats/template', controller.downloadTemplate);
 
 // POST /import/crime-stats - Upload and import crime data
 router.post('/import/crime-stats', upload.single('file'), controller.uploadCrimeStats);
+
+// ============================================
+// Socio-Economic Import Routes
+// ============================================
+
+// GET /import/socio-economic/themes - List available socio-economic themes
+router.get('/import/socio-economic/themes', controller.listSocioEconomicThemes);
+
+// GET /import/socio-economic/template - Download Excel template
+router.get('/import/socio-economic/template', controller.downloadSocioEconomicTemplate);
+
+// POST /import/socio-economic - Upload and import socio-economic data
+router.post('/import/socio-economic', upload.single('file'), controller.uploadSocioEconomic);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const { pool } = require('../../db/pool');
-const { excelColumnToKey } = require('./themeService');
+const { excelColumnToKey, socioExcelColumnToKey, getSocioEconomicColumnToKeyMap } = require('./themeService');
+const { getDomainConfig } = require('./domainConfig');
 
 /**
  * Fetch all lookup data for validation
@@ -225,7 +226,202 @@ function validateRows(rows, crimeColumns, lookups) {
   return { validRecords, errors };
 }
 
+// ============================================
+// Socio-Economic Validation Functions
+// ============================================
+
+/**
+ * Validate a single cell value for socio-economic data
+ * Unlike crime data, zero is a valid value (e.g., 0% higher education)
+ * @param {*} cellValue - Cell value from Excel
+ * @param {number} rowNum - Row number for error reporting
+ * @param {string} columnName - Column name
+ * @returns {Object} { shouldImport, value, error }
+ */
+function validateSocioEconomicCellValue(cellValue, rowNum, columnName) {
+  // Empty or null - skip
+  if (cellValue === null || cellValue === undefined || cellValue === '') {
+    return { shouldImport: false, reason: 'empty' };
+  }
+
+  // Try to parse as number
+  const numValue = parseFloat(String(cellValue).trim());
+
+  // Not a number
+  if (isNaN(numValue)) {
+    return {
+      shouldImport: false,
+      error: {
+        row: rowNum,
+        column: columnName,
+        value: cellValue,
+        error: 'Value must be numeric or left empty'
+      }
+    };
+  }
+
+  // Negative - error (demographics can't be negative)
+  if (numValue < 0) {
+    return {
+      shouldImport: false,
+      error: {
+        row: rowNum,
+        column: columnName,
+        value: cellValue,
+        error: 'Value cannot be negative. Demographic values must be zero or positive.'
+      }
+    };
+  }
+
+  // Zero is valid for socio-economic data (e.g., 0% with higher education)
+  // Valid non-negative number
+  return {
+    shouldImport: true,
+    value: numValue
+  };
+}
+
+/**
+ * Validate Excel rows for socio-economic data
+ * @param {Array} rows - Parsed Excel rows
+ * @param {Array} socioColumns - Socio-economic indicator column names
+ * @param {Object} lookups - Lookup data from database
+ * @param {Object} columnToKeyMap - Map from Excel column names to indicator keys
+ * @returns {Object} { validRecords, errors }
+ */
+function validateSocioEconomicRows(rows, socioColumns, lookups, columnToKeyMap) {
+  const config = getDomainConfig('socio-economic');
+  const validRecords = [];
+  const errors = [];
+
+  rows.forEach((row, index) => {
+    const rowNum = index + 2; // Excel row number (1-based + header)
+
+    // Validate required fields
+    if (!row.Municipality_Code) {
+      errors.push({
+        row: rowNum,
+        column: 'Municipality_Code',
+        value: row.Municipality_Code,
+        error: 'Municipality code is required'
+      });
+      return; // Skip this row
+    }
+
+    if (!row.Year) {
+      errors.push({
+        row: rowNum,
+        column: 'Year',
+        value: row.Year,
+        error: 'Year is required'
+      });
+      return;
+    }
+
+    // Validate municipality code exists
+    if (!lookups.municipalities.has(row.Municipality_Code)) {
+      errors.push({
+        row: rowNum,
+        column: 'Municipality_Code',
+        value: row.Municipality_Code,
+        error: `Municipality code '${row.Municipality_Code}' not found in database`
+      });
+      return;
+    }
+
+    // Validate year
+    const year = parseInt(row.Year);
+    if (isNaN(year)) {
+      errors.push({
+        row: rowNum,
+        column: 'Year',
+        value: row.Year,
+        error: `Year must be a valid number`
+      });
+      return;
+    }
+
+    if (!lookups.times[year]) {
+      const validYears = Object.keys(lookups.times).sort().join(', ');
+      errors.push({
+        row: rowNum,
+        column: 'Year',
+        value: row.Year,
+        error: `Year '${row.Year}' is not available in the system. Valid years: ${validYears}`
+      });
+      return;
+    }
+
+    // Validate scenario (optional, defaults to 'census 2022' for socio-economic data)
+    const scenario = row.Scenario || config.defaultScenario;
+
+    // Check if scenario is valid for socio-economic data
+    if (config.validScenarios && !config.validScenarios.includes(scenario)) {
+      errors.push({
+        row: rowNum,
+        column: 'Scenario',
+        value: scenario,
+        error: `Invalid scenario '${scenario}'. Valid scenarios for socio-economic data: ${config.validScenarios.join(', ')}`
+      });
+      return;
+    }
+
+    if (!lookups.scenarios[scenario]) {
+      errors.push({
+        row: rowNum,
+        column: 'Scenario',
+        value: scenario,
+        error: `Scenario '${scenario}' not found in database`
+      });
+      return;
+    }
+
+    // Process each socio-economic column
+    socioColumns.forEach(columnName => {
+      const cellValue = row[columnName];
+      const validation = validateSocioEconomicCellValue(cellValue, rowNum, columnName);
+
+      if (validation.error) {
+        errors.push(validation.error);
+        return;
+      }
+
+      if (!validation.shouldImport) {
+        // Skip this cell (empty only - zero is valid for socio-economic)
+        return;
+      }
+
+      // Convert Excel column name to indicator key using the label-to-key map
+      const indicatorKey = socioExcelColumnToKey(columnName, columnToKeyMap);
+
+      // Validate indicator exists
+      if (!lookups.indicators[indicatorKey]) {
+        errors.push({
+          row: rowNum,
+          column: columnName,
+          value: cellValue,
+          error: `Unknown indicator '${indicatorKey}'`
+        });
+        return;
+      }
+
+      // Create valid record
+      validRecords.push({
+        indicator_id: lookups.indicators[indicatorKey],
+        time_id: lookups.times[year],
+        scenario_id: lookups.scenarios[scenario],
+        entity_code: row.Municipality_Code,
+        raw_value: validation.value,
+        value_0_100: null
+      });
+    });
+  });
+
+  return { validRecords, errors };
+}
+
 module.exports = {
   fetchLookups,
-  validateRows
+  validateRows,
+  validateSocioEconomicRows
 };

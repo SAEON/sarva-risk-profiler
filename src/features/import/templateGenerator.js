@@ -1,7 +1,8 @@
 const XLSX = require('xlsx');
-const { getIndicatorsByThemes, keyToExcelColumn } = require('./themeService');
+const { getIndicatorsByThemes, keyToExcelColumn, getSocioEconomicIndicatorsByThemes, socioLabelToExcelColumn } = require('./themeService');
 const municipalities = require('../../../tmp/municipalities.json');
 const { pool } = require('../../db/pool');
+const { getDomainConfig } = require('./domainConfig');
 
 /**
  * Generate Excel template for selected theme(s)
@@ -136,4 +137,143 @@ async function generateTemplate(themes, year = null) {
   return buffer;
 }
 
-module.exports = { generateTemplate };
+/**
+ * Generate Excel template for socio-economic data
+ * @param {string|string[]} themes - Theme name(s)
+ * @param {number} year - Optional year to pre-fill
+ * @returns {Buffer} Excel file buffer
+ */
+async function generateSocioEconomicTemplate(themes, year = null) {
+  const config = getDomainConfig('socio-economic');
+
+  // Fetch available years from database
+  const yearsResult = await pool.query(`
+    SELECT period, label FROM dim.time
+    WHERE granularity = 'year'
+    ORDER BY period DESC
+  `);
+  const availableYears = yearsResult.rows;
+  const themeArray = Array.isArray(themes) ? themes : [themes];
+  const indicators = await getSocioEconomicIndicatorsByThemes(themeArray);
+
+  // Sort indicators by sort_order
+  indicators.sort((a, b) => (a.sort_order || 999) - (b.sort_order || 999));
+
+  // Build header row
+  const headers = [
+    'Municipality_Code',
+    'Municipality_Name',
+    'Year',
+    ...indicators.map(ind => socioLabelToExcelColumn(ind.label)),
+    'Scenario'
+  ];
+
+  // Build sample data row
+  const sampleRow = [
+    'JHB',
+    'City of Johannesburg',
+    year || 2022,
+    ...indicators.map(() => ''),  // Empty cells for data
+    config.defaultScenario
+  ];
+
+  // Create worksheet data
+  const wsData = [
+    headers,
+    sampleRow
+  ];
+
+  // Create workbook
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: Socio_Economic_Data
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Set column widths
+  ws['!cols'] = [
+    { wch: 20 },  // Municipality_Code
+    { wch: 30 },  // Municipality_Name
+    { wch: 10 },  // Year
+    ...indicators.map(() => ({ wch: 20 })),  // Indicator columns
+    { wch: 15 }   // Scenario
+  ];
+
+  XLSX.utils.book_append_sheet(wb, ws, config.sheetName);
+
+  // Sheet 2: Available Years
+  const yearsData = [
+    ['Year', 'Label'],
+    ...availableYears.map(y => [y.period, y.label || y.period])
+  ];
+  const wsYears = XLSX.utils.aoa_to_sheet(yearsData);
+  wsYears['!cols'] = [{ wch: 10 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, wsYears, 'Available_Years');
+
+  // Sheet 3: Municipalities Reference
+  const munisData = [
+    ['Municipality Code', 'Municipality Name'],
+    ...municipalities.map(m => [m.code, m.name])
+  ];
+  const wsMunis = XLSX.utils.aoa_to_sheet(munisData);
+  wsMunis['!cols'] = [{ wch: 20 }, { wch: 35 }];
+  XLSX.utils.book_append_sheet(wb, wsMunis, 'Available_Municipalities');
+
+  // Sheet 4: Instructions
+  const yearsList = availableYears.map(y => y.period).join(', ');
+  const validScenarios = config.validScenarios.join(', ');
+  const instructions = [
+    ['SOCIO-ECONOMIC DATA IMPORT TEMPLATE - INSTRUCTIONS'],
+    [''],
+    ['THEME(S): ' + themeArray.join(', ')],
+    ['NUMBER OF INDICATORS: ' + indicators.length],
+    [''],
+    ['HOW TO USE:'],
+    ['1. Fill in the Socio_Economic_Data sheet with your demographic/census data'],
+    ['2. Municipality_Code and Year are REQUIRED for each row'],
+    ['3. Fill only the columns you have data for'],
+    ['4. Leave cells EMPTY if you don\'t have data for that indicator'],
+    ['5. Zero (0) is a VALID value for percentages (e.g., 0% higher education)'],
+    ['6. Enter only NON-NEGATIVE numbers (counts, percentages, or ratios)'],
+    ['7. Scenario defaults to "' + config.defaultScenario + '" if left empty'],
+    [''],
+    ['IMPORTANT - VALID YEARS:'],
+    ['You MUST use one of the following years (see Available_Years sheet):'],
+    [yearsList],
+    ['Census data is typically for years: 1996, 2001, 2011, 2022'],
+    ['Using any other year will cause validation errors.'],
+    [''],
+    ['IMPORTANT - SCENARIO:'],
+    ['The Scenario column identifies the data source/census.'],
+    ['If you leave it empty, it will default to "' + config.defaultScenario + '".'],
+    ['Valid scenarios for socio-economic data: ' + validScenarios],
+    [''],
+    ['VALIDATION RULES:'],
+    ['- Municipality codes must exist (see Available_Municipalities sheet)'],
+    ['- Year must be one of the valid years listed above (see Available_Years sheet)'],
+    ['- Values must be numeric (no text)'],
+    ['- Negative numbers will cause errors'],
+    ['- Zero (0) is imported as a valid value (unlike crime data)'],
+    ['- Empty cells are skipped (not imported, not an error)'],
+    [''],
+    ['EXAMPLE:'],
+    ['Municipality_Code: JHB'],
+    ['Year: 2022'],
+    ['Total_population: 5635127  (will be imported)'],
+    ['Higher_education_20_years: 18.5  (will be imported)'],
+    ['No_schooling_20_years: 0  (will be imported - zero is valid)'],
+    ['Average_household_size: (empty - will be skipped)'],
+    ['Scenario: census 2022  (or leave empty for default)'],
+    [''],
+    ['INDICATORS IN THIS TEMPLATE:'],
+    ...indicators.map(ind => [`${socioLabelToExcelColumn(ind.label)}: ${ind.label} (${ind.unit})`])
+  ];
+  const wsInstructions = XLSX.utils.aoa_to_sheet(instructions);
+  wsInstructions['!cols'] = [{ wch: 80 }];
+  XLSX.utils.book_append_sheet(wb, wsInstructions, 'Instructions');
+
+  // Generate buffer
+  const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
+  return buffer;
+}
+
+module.exports = { generateTemplate, generateSocioEconomicTemplate };
